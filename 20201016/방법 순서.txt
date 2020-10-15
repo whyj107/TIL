@@ -1,8 +1,0 @@
-chrome://flags/#enable-experimental-web-platform-features
-여기에서 [Experimental Web Platform features] Enabled로 변경
-Enable Bluetooth Serial Port Profile in Serial API 와 뭐가 다른지 모르겠넹
-
-https://developers.chrome.com/origintrials/#/trials/active
-여기에서 Serial API 검색해서 REGISTER 한다.
-
-REGISTER하면 Token을 주는데 이 토큰을 이용하면 된다.
