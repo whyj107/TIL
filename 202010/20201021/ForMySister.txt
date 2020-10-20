@@ -1,0 +1,42 @@
+Sub Test()
+    '// 14번째 아래 한줄 추가
+    Rows(15).Insert
+End Sub
+'// 0.0499 버전
+Sub four_fun()
+    Dim strAddr_four As String
+    Dim four As Range
+    With ActiveSheet.UsedRange
+        Set four = Range("C:C").Find(What:="0.0499", Lookat:=xlPart)
+        
+        If Not four Is Nothing Then
+            strAddr_four = four.Address
+            
+            Do
+                Rows(four.Row + 1).Insert
+                Set four = Range("C:C").FindNext(four)
+            Loop While Not four Is Nothing And four.Address <> strAddr_four
+            
+        End If
+
+    End With
+End Sub
+'// 0.800 버전
+Sub eight_fun()
+    Dim strAddr_eight As String
+    Dim eight As Range
+    With ActiveSheet.UsedRange
+        Set eight = Range("C:C").Find(What:="0.800", Lookat:=xlPart)
+        If Not eight Is Nothing Then
+            strAddr_eight = eight.Address
+            
+            Do
+                Rows(eight.Row + 1).Insert
+                Set eight = Range("C:C").FindNext(eight)
+            Loop While Not eight Is Nothing And eight.Address <> strAddr_eight
+            
+        End If
+
+    End With
+
+End Sub
