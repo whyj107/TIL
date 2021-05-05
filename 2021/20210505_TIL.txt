@@ -1,0 +1,67 @@
+MainWindow.xaml--------------------------------------------------------------------------------------
+        <ListView Name="myList" DragEnter="myList_DragEnter" Drop="myList_DragDrop" AllowDrop="True"/>
+---------------------------------------------------------------------------------------------------------
+MainWindow.xaml.cs-----------------------------------------------------------------------------------
+        private void myList_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.All;
+            else
+                e.Effects = DragDropEffects.None;
+        }
+
+        private void myList_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                ListViewItem lvi = new ListViewItem();
+
+                // 디렉토리인지 파일인지 확인
+                if (!IsDirectory(file))
+                {
+                    MessageBox.Show("디렉토리가 아닙니다!");
+                    return;
+                }
+
+                Grid g = new Grid();
+                Label l = new Label() { 
+                    Content = file,
+                    HorizontalAlignment = HorizontalAlignment.Left 
+                };
+
+                Button b = new Button()
+                {
+                    Content = "버튼",
+                    HorizontalAlignment = HorizontalAlignment.Right
+                };
+
+                g.Children.Add(l);
+                g.Children.Add(b);
+
+                lvi.Content = g;
+
+                myList.Items.Add(lvi);
+            }
+        }
+
+        private bool IsDirectory(string path)
+        {
+            FileAttributes chk = File.GetAttributes(path);
+            if((chk & FileAttributes.Directory)== FileAttributes.Directory)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+---------------------------------------------------------------------------------------------------------
+다음 추가해야하는 것 TrayIcon? 기능인가 프로그램 꺼져있어도 실행 될 수 있어야하고
+Process로 폴더나 파일 실행이 감지되는 것 확인
+그다음에 암호 설정하는 부분 만들어야됨
+암호 관련해서 컴퓨터 암호를 가져오거나 새로 만들도록 설정...
+근데 이 부분을 어떻게 해야할지 안정했는데 일단 더 생각해보자.
+마음만 먹으면 하루면 되겠는데 그게 제일 어렵네
+일단 오늘은 여기까지
