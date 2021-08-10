@@ -1,0 +1,14 @@
+html, body {
+    margin: 5px;
+    padding: 0;
+}
+
+div.test{
+    background-color: #ecd4ff;
+    text-align: center;
+    padding: 5px;
+}
+
+div{
+    background-color: whitesmoke;
+}

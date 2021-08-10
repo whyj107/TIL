@@ -1,0 +1,281 @@
+<html>
+    <!-- 
+        https://kr.vuejs.org/v2/guide/index.html
+        따라서 공부
+     -->
+    <head>
+        <link rel="stylesheet" href="index.css">
+        <!-- 개발버전, 도움되는 콘솔 경고를 포함. -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+        <!-- 상용버전, 속도와 용량이 최적화됨. -->
+        <!--
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        -->
+    </head>
+    <body>
+        <div id="app">
+            {{message}}
+        </div>
+
+        <br/>
+        
+        <div id="app-2">
+            <span v-bind:title="message">
+                내 위에 잠시 마우스를 올리면 동적으로 바인딩 된 시간을 볼 수 있습니다!
+            </span>
+        </div>
+
+        <br/>
+
+        <div id="app-3">
+            <p v-if="seen">if문을 사용했어요.</p>
+        </div>
+
+        <br/>
+
+        <div id="app-4">
+            <ol>
+                <li v-for="todo in todos">
+                    {{todo.text}}
+                </li>
+            </ol>
+        </div>
+
+        <br/>
+
+        <div id="app-5">
+            <p>{{message}}</p>
+            <button v-on:click="reverseMessage">메시지 뒤집기</button>
+        </div>
+
+        <br/>
+
+        <div id="app-6">
+            <p>{{message}}</p>
+            <input v-model="message">
+        </div>
+
+        <br/>
+
+        <div id="app-7">
+            <ol>
+                <todo-item></todo-item>
+                <todo-item></todo-item>
+            </ol>
+        </div>
+
+        <br/>
+
+        <div id="app-8">
+            <ol>
+                <todo-item1 
+                    v-for="item in groceryList"
+                    v-bind:todo="item"
+                    v-bind:key="item.id"></todo-item1>
+            </ol>
+        </div>
+
+        <br/>
+
+        <div id="app-9">
+            <p>{{foo}}</p>
+            <!-- obj.foo 는 더이상 변하지 않습니다. -->
+            <button v-on:click="foo = 'baz' ">Change it</button>
+        </div>
+
+        <br/>
+
+        <!-- COMPUTED -->
+        <div id="app-10">
+            {{fullName}}
+        </div>
+
+        <!-- WATCH -->
+        <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+        <div id="app-11">
+            <p>
+                yes/no 질문을 물어보세요:
+                <input v-model="question">
+            </p>
+            <p> {{answer}} </p>
+        </div>
+
+        <!-- 조건부 -->
+        <div id="app-12">
+            <h1 v-if="asesome">Veu is awesome!</h1>
+            <h1 v-else>Oh no 😥</h1>
+        </div>
+
+        <div id="app-13">
+            <div v-if="Math.random() > 0.5">
+                이제 나를 볼 수 있어요
+            </div>
+            <div v-else>
+                이제는 안보입니다
+            </div>
+        </div>
+
+        <div id="app-14">
+            <div v-if="type === 'A'">
+                A
+              </div>
+              <div v-else-if="type === 'B'">
+                B
+              </div>
+              <div v-else-if="type === 'C'">
+                C
+              </div>
+              <div v-else>
+                Not A/B/C
+              </div>
+        </div>
+
+        <br/>
+
+        <div id="app-15">
+            <template v-if="loginType === 'username'">
+                <label>사용자 이름</label>
+                <input placeholder="사용자 이름을 입력하세요" key="username-input">
+            </template>
+            <template v-else>
+                <label>이메일</label>
+                <input placeholder="이메일 주소를 입력하세요" key="email-input">
+            </template>
+        </div>
+
+        <br/>
+
+        <!-- v-show -->
+        <div id="app-16" class="test">
+            <h1 v-show="ok">보이나요?</h1>
+        </div>
+
+        <br/>
+
+        <!-- 리스트 렌더링 -->
+        <div id="app-17">
+            <li v-for="item in items">
+                {{item.message}}
+            </li>
+        </div>
+
+        <br/>
+
+        <div id="app-18">
+            <ol>
+                <li v-for="(item, index) in items">
+                    {{ parentMessage }} - {{ index }} - {{ item.message }}
+                </li>     
+            </ol>
+        </div>
+
+        <br/>
+
+        <div id="app-19">
+            <ul>
+                <!-- value, key, idx 순서 -->
+                <li v-for="(value, name, idx) in object">
+                    {{idx}}. {{name}}: {{value}}
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+
+        <!-- 필터링 -->
+        <div id="app-20">
+            <li v-for="n in even(numbers)">{{ n }}</li>
+        </div>
+
+        <br/>
+
+        <div id="app-21">
+            <span v-for="n in 10">{{ n }} </span>
+        </div>
+
+        <br/>
+
+        <div id="app-22">
+            <form v-on:submit.prevent="addNewTodo">
+              <label for="new-todo">Add a todo</label>
+              <input
+                v-model="newTodoText"
+                id="new-todo"
+                placeholder="E.g. Feed the cat"
+              >
+              <button>Add</button>
+            </form>
+            <ul>
+              <li
+                is="todo-item"
+                v-for="(todo, index) in todos"
+                v-bind:key="todo.id"
+                v-bind:title="todo.title"
+                v-on:remove="todos.splice(index, 1)"
+              ></li>
+            </ul>
+          </div>
+
+        <br/>
+
+        <!-- 이벤트 핸들링 -->
+        <div id="app-23">
+            <button v-on:click="counter += 1">+ 1</button>
+            <p>위 버튼을 클릭한 횟수는 {{ counter }} 번 입니다.</p>
+        </div>
+
+        <div id="app-24">
+            <button v-on:click="greet">Greet</button>
+        </div>
+
+        <div id="app-25">
+            <button v-on:click="say('Hi')">Say hi</button>
+            <button v-on:click="say('what')">Say what</button>
+            <button v-on:click="warn('Form cannot be submitted yet.', $event)">
+                Submit
+            </button>
+        </div>
+
+        <!-- 참고만 하자
+            클릭 이벤트 전파가 중단됩니다
+            <a v-on:click.stop="doThis"></a>
+
+            제출 이벤트가 페이지를 다시 로드 하지 않습니다
+            <form v-on:submit.prevent="onSubmit"></form>
+
+            수식어는 체이닝 가능합니다
+            <a v-on:click.stop.prevent="doThat"></a>
+
+            단순히 수식어만 사용할 수 있습니다
+            <form v-on:submit.prevent></form>
+
+            이벤트 리스너를 추가할 때 캡처모드를 사용합니다
+            즉, 내부 엘리먼트를 대상으로 하는 이벤트가 해당 엘리먼트에서 처리되기 전에 여기서 처리합니다.
+            <div v-on:click.capture="doThis">...</div>
+
+            event.target이 엘리먼트 자체인 경우에만 트리거를 처리합니다
+            자식 엘리먼트에서는 안됩니다
+            <div v-on:click.self="doThat">...</div>
+            
+            클릭 이벤트는 최대 한번만 트리거 됩니다.
+            <a v-on:click.once="doThis"></a>
+
+            스크롤의 기본 이벤트를 취소할 수 없습니다.
+            <div v-on:scroll.passive="onScroll">...</div>
+
+            키 이벤트
+            <input v-on:keyup.enter="submit"/>
+            <input v-on:keyup.page-down="onPageDown"/>
+            <input v-on:keyup.13="submit"/>
+
+            이외의 시스템 수식어 키 목록은
+            https://kr.vuejs.org/v2/guide/events.html#%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%88%98%EC%8B%9D%EC%96%B4-%ED%82%A4-%EB%AA%A9%EB%A1%9D
+            여기서 참고하자
+        -->
+
+        <script src="index.js"></script>
+    </body>
+</html>
