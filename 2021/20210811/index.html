@@ -1,0 +1,185 @@
+<html>
+    <!--
+        https://kr.vuejs.org/v2/guide/forms.html
+        따라서 공부
+    -->
+    <head>
+        <link rel="stylesheet" href="index.css">
+        <!-- 개발버전, 도움되는 콘솔 경고를 포함. -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+        <!-- 상용버전, 속도와 용량이 최적화됨. -->
+        <!--
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        -->
+        <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+    </head>
+    <body>
+        <!-- 폼 입력 바인딩 -->
+        <!-- 문자열 -->
+        <div id="app-1">
+            <input v-model="message" placeholder="여기를 수정해보세요">
+            <p>메시지: {{ message }}</p>
+        </div>
+        <br/>
+        
+        <!-- 여러줄을 가진 문장 -->
+        <div id="app-2">
+            <span>여러 줄을 가지는 메시지:</span>
+            <p style="white-space: pre-line">{{ message }}</p>
+            <br/>
+            <textarea v-model="message" placeholder="여러줄을 입력해보세요"></textarea>
+        </div>
+        <br />
+        
+        <!-- 체크박스 -->
+        <div id="app-3">
+            <input type="checkbox" v-model="checked">
+            <label for="checkbox">{{ checked }}</label>
+        </div>
+        <br/>
+        <div id="app-4">
+            <input type="checkbox" value="Jack" v-model="checkedNames">
+            <label for="jack">Jack</label>
+            <input type="checkbox" value="John" v-model="checkedNames">
+            <label for="john">John</label>
+            <input type="checkbox" value="Mike" v-model="checkedNames">
+            <label for="mike">Mike</label>
+            <br/>
+            <span>체크한 이름: {{checkedNames}}</span>
+        </div>
+        <br/>
+
+        <!-- 라디오 -->
+        <div id="app-5">
+            <input type="radio" value="One" v-model="picked">
+            <label for="one">One</label>
+            <br/>            
+            <input type="radio" value="Two" v-model="picked">
+            <label for="two">Two</label>
+            <br/>
+            <span>선택: {{picked}}</span>
+        </div>
+        <br/>
+        
+        <!-- 셀렉트 -->
+        <div id="app-6">
+            <select v-model="selected">
+                <option disabled value="">Please select one</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+            </select>
+            <span>선택함: {{ selected }}</span>
+        </div>
+        <br/>
+        <div id="app-7">
+            <select v-model="selected" multiple>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+            </select>
+            <span>선택함: {{ selected }}</span>
+        </div>
+        <br/>
+        <div id="app-8">
+            <select v-model="selected">
+                <option v-for="option in options" v-bind:value="option.value">
+                    {{option.text}}
+                </option>
+            </select>
+            <span>선택함: {{ selected }}</span>
+        </div>
+        <br/>
+
+        <!-- 값 바인딩하기
+        `picked` 는 선택시 문자열 "a" 입니다
+        <input type="radio" v-model="picked" value="a">
+
+        `toggle` 는 true 또는 false 입니다
+        <input type="checkbox" v-model="toggle">
+
+        `selected`는 "ABC" 선택시 "abc" 입니다
+        <select v-model="selected">
+        <option value="abc">ABC</option>
+        </select>
+        -->
+
+        <!-- 체크박스 -->
+        <div id="app-9">
+            <input type="checkbox" v-model="toggle" true-value="yes" false-value="no">
+            <span>{{toggle}}</span>
+        </div>
+        <br/>
+
+        <!-- 라디오 -->
+        <div id="app-10">
+            <input type="radio" v-model="pick" v-bind:value="a">
+            <label for="pick">{{pick}}</label>
+        </div>
+        <br/>
+
+        <!-- 셀렉트 옵션 -->
+        <div id="app-11">
+            <select v-model="selected">
+                <option v-bind:value="{number: 123}">key1</option>
+                <option v-bind:value="{number: 234}">key2</option>
+            </select>
+            <span>{{selected.number}}</span>
+        </div>
+        <br/>
+
+        <!-- 수식어 -->
+        <!-- lazy -->
+        <div id="app-12">
+            <input v-model.lazy="msg">
+            <span>{{msg}}</span>
+        </div>
+        <br/>
+
+        <!-- number -->
+        <div id="app-13">
+            <input v-model.number="age" type="number">
+            <span>{{age}}</span>
+        </div>
+        <br/>
+
+        <!-- trim -->
+        <div id="app-14">
+            <input v-model.trim="msg">
+            <span>{{msg}}</span>
+        </div>
+        <br/>
+
+        <!-- Procs는 페이지에서 보자.
+            https://kr.vuejs.org/v2/guide/components.html#Props
+        -->
+
+        <!-- 단방향 -->
+        <!-- v-on을 이용한 사용자 지정 이벤트 -->
+        <div id="app-15">
+            <p>{{total}}</p>
+            <button-counter v-on:increment="incrementTotal"></button-counter>
+            <button-counter v-on:increment="incrementTotal"></button-counter>
+        </div>
+        <br/>
+
+        <!-- 양방향 -->
+        <div id="app-16">
+            <currency-input label="Price" v-model="price"></currency-input>
+            <currency-input label="Shipping" v-model="shipping"></currency-input>
+            <currency-input label="Handling" v-model="handling"></currency-input>
+            <currency-input label="Discount" v-model="discount"></currency-input>
+            
+            <p>Total: ${{ total }}</p>
+        </div>
+        <br />
+
+
+
+
+        <script src="index.js"></script>
+    </body>
+    
+</html>
