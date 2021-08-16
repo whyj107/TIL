@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyA9tTRekdZ-uxZGCF6BeQdD8bZcbdigQNk",
+    key: "api key ",
     libraries: "places",
     region: "KR" //이거 추가 안하면 동해가 일본해로 뜸 ㅡ"ㅡ
   }
