@@ -54,10 +54,10 @@ print('search:', s)
 
 # findall() : 정규식과 매치되는 모든 문자열을 리스트로 돌려준다.
 p = re.compile('[a-z]+')
-fa = p.findall("life is go on")
+fa = p.findall("life goes on")
 print('findall:', fa)
 
 # finditer() : 정규식과 매치되는 모든 문자열을 반복 가능한 객체로 돌려준다.
-fi = p.finditer("life is go on")
+fi = p.finditer("life goes on")
 print('finditer:', fi)
 for r in fi: print(r.group())
