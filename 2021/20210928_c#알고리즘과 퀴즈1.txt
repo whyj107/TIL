@@ -1,0 +1,49 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+1. c#에서 사용되는 public, protected, private, internal의 차이점을 설명하시오.
+ → 클래스 혹은 클래스 멤버에 붙여서 접근 권한을 설정하는 Access Modifier이다.
+ → public : 모든 외부 객체로부터 접근을 허용한다.
+ → protected : 상속되는 파생클래스에서만 접근할 수 있다.
+ → private : 해당 클래스 내에서만 사용된다. 외부 혹은 파생클래스에서 접근 불가하다.
+ → internal : 어셈블리 내에 있는 다른 클래스들에서 접근할 수 있다.
+
+
+2. Boxing과 Unboxing에 대해 설명하시오.
+Value Type : int, char 등의 기초 데이터(Primitive data)를 저장하는 티입. Stack에 저장
+Reference Type : Managed Heap에 객체를 생성하고 이 참조 값을 스택 혹은 Heap에 갖는다.
+Reference Type인 클래스가 객체를 Heap에 만들 때, 클래스 멤버로 Value Type을 갖는 경우, 이는 Heap에 생성된다.
+Value Type의 값을 캐스팅을 통해 Reference Type으로 변경할 경우, Reference Type의 객체는 새 객체를 Managed Heap에 만들고, 스택의 값을 Heap에 복사하는데, 이를 Boxing이라 한다.
+Boxing/Unboxing을 대량의 데이터 구조에서 자주 발생시키면, 성능을 크게 저하시키는 요인이 된다.
+
+Boxing의 예
+int val = 100;
+object obj1 = (object)val;
+
+Unboxing의 예
+int v = (int)obj1;
+
+
+3. 아래와 같은 Prototype을 갖는 public 델리게이트를 c#으로 적어보시오.
+(1) 리턴 타입은 unsigned 16비트 정수이다.
+(2) 델리게이트명은 MyDelegate이다.
+(3) 2개의 파라미터가 있는데 첫번째는 문자열 배열, 두번째는 IComparable 인터페이스이다.
+→ public delegate ushort MyDelegate(string[] s, IComparable c);
++ 예제
+MyDelegate myDel = new MyDelegate(MyFunc);
+string[] s = new string[10];
+IComparable cmp = new MyComp();
+myDel(s, cmp);
+
+
+4. System.Int32 타입으로 선언된 변수 A는 NULL을 가질 수 있습니까?
+→ int, double, bool과 같은 Value Type은 NULL값을 가질 수 없다.
++ int 타입에 NULL을 갖게 하고 싶으면 int? ix = null; 로 사용할 수 있다.
+
+
+5. GAC이란 무엇인가? 만약 동일한 DLL이 GAC에도 있고 현재 어플리케이션 디렉토리에도 있다면, 어플리케이션은 어떤 곳에 있는 DLL을 사용합니까?
+→ GAC(Global Assembly Cache) : .NET Assembly를 머신 전체에서 공유하여 사용하기 위한 특별한 캐쉬
+- Windows 디렉토리 밑의 assembly라는 디렉토리에 존재한다. GAC에 .NET 어셈블리를 설치하기 위해서는 gacutil.exe 같은 유틸리티를 사용한다.
+- GAC에 설치되기 위해서는 해당 어셈블리가 Strongly-named 어셈블리이어야 한다. GAC에 설치되는 DLL은 이름과 함께 Version, Culture, public key를 모두 포함해야 하며, 어셈블리가 SN.exe같은 툴을 써서 sign되어져야 한다.
+- DLL이 GAC에 설치되면, 실행시 우선 순위를 갖게된다. 즉, 실행 프로그램과 동일한 디렉토리에 DLL이 있고, 동일한 DLL이 GAC에 있다면, GAC의 DLL이 실행된다.
+- GAC DLL은 기존의 DLL Hell문제를 해결하기 위해 Version정보를 함께 가지고 있는데, 동일한 DLL명을 사용하더라도 여러 Version이 함께 공존할 수 있다.
