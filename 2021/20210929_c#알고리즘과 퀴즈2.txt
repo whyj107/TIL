@@ -1,0 +1,75 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+6. c#으로 다음과 같은 멤버들을 갖는 인터페이스를 선언하시오.
+(1) 인터페이스명은 IAction
+(2) ActionName이라는 문자열 속성을 갖는다.
+(3) Action이라는 메서드를 갖는데, 파라미터 id를 정수형으로 받아들인다.
+(4) Action 메서드가 끝날 때 불려지는 ActionComplete라는 이벤트를 갖는다.
+→
+// (1)
+public interface IAction{
+    // (2)
+    public string ActionName{ get; set; }
+
+    // (3)
+    public void Action(int id){
+        DoAction(id);
+
+        if(ActionComplete != null){ ActionComplete(this, EventArgs.Empty); }
+    }
+
+    private void DoAction(int id){ }
+    // (4)
+    public event EventHandler ActionComplete;
+}
+
+
+7. 텍스트 파일안에 1부터 100까지 정수가 한 라인씩 100줄 들어있다. 이 파일로부터 정수를 읽어 들여 전체 합계를 구하는 c# 프로그램을 작성하시오.
+→
+int Solve(string txtFile){
+    int sum = 0;
+    string[] arr = File.ReadAllLines(txtFile);
+    foreach(string s in arr){
+        sum += Int32.Parse(s);
+    }
+    return sum;
+}
+
+
+8. 인덱서(Indexer)를 가진 클래스를 쓰시오. 내부적으로 배열을 사용하는 인덱서를 간략히 구현해 보시오.
+→
+public class Solve{
+    private const int MAX = 100;
+    private object[] table = new object[MAX];
+
+    public object this[int i]{
+        get{
+	if(i < 0 || i >= MAX){
+	    throw new IndexOutOfRangeException();
+	}
+	return this.table[i];
+        }
+        set{
+	if(i < 0 || i >= MAX){
+	    throw new IndexOutOfRangeException();
+	}
+	this.table[i] = value;
+        }
+    }
+}
++ 인덱서의 파라미터로 배열인덱스를 나타내는 숫자가 아니라 문자열 키를 받아들인다면, Hash Table(Dictionary)를 사용하는 것이 적합하다.
+
+
+9. c#에서 try, catch, finally 블럭을 설명하시오. 만약 try, finally만 있을 때, 에러가 발생하면 finally 블럭은 실행되는가?
+→ c#에서 try, catch, finally 블럭은 예외가 발생했을 경우, 예외처리를 실해하는데 사용된다.
+try블럭에서 예외가 발생하면 catch블럭이 있는 경우 catch 블럭을 실행한다. catch블럭은 특정 Exception 별로 다르게 처리하기 위해 여러 catch 블럭을 둘 수 있다. finally 블럭은 예외가 발생하든 하지 않든 상관없이 반드시 마지막에 실행하게 된다.
+실행 순서
+try(예외 발생) -> catch -> finally
+try(예외 발생없음) -> finally
+
+→ try, finally만 있을 때 에러 발생하면 finally 블럭 실행된다.
+
+
+10. System.String과 StringBuilder의 차이점은 무엇인지 설명하시오.
+→ String은 한번 문자열을 지정하고 객체를 생성했으면, 더이상 문자열을 수정할 수 없게 된다. StringBuilder는 이와 반대의 경우로 객체 생성이후에도 문자열을 수정할 수 있다.
