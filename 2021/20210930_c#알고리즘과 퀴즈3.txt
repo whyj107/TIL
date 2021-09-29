@@ -1,0 +1,40 @@
+11. .NET의 System.Array 클래스에는 Array.Clone() 메서드와 Array.CopyTo() 메서드가 있는데, 이 둘의 차이점은 무엇인가?
+→
+두가지 모두 Shallow Copy로 배열의 데이터를 복사한다.
+Clone()은 새로운 Target 배열을 생성하여 생성된 배열의 레퍼런스를 리턴하지만,
+CopyTo()는 이미 존재하는 Target 배열의 지정된 배열 시작 인덱스 위치로 데이터를 복사한다.
+
+
+12. c++로 작성된 Native DLL에 있는 메서드를 c#에서 사용할 수 있는가? 만약 가능하다면, user32.dll의 EnableWindow() 함수를 c#에서 호출하는 코드를 작성하시오.
+→
+c++로 작성된 Unmanaged DLL안에 있는 함수를 c#과 같은 Managed Code에서 사용할 수 있다. 이를 P/Invoke(Platform Invoke)라 부른다.
+DllImport 를 통해 외부 DLL명과 Import 할 함수 원형을 extern static으로 지정가능하다.
+
+// 외부 함수 정의
+[DllImport("user32.dll")]
+static extern bool EnableWindow(IntPtr hwnd, bool bEnable);
+private void Test(obejct sender, EventArgs e){
+    // c#에서 사용
+    EnableWindow(Control.Handle, false);
+}
+
+
+13. 추상클래스(Abstract Class)와 봉인클래스(Sealed Class)의 차이점을 설명하시오.
+→
+추상클래스 : 클래스가 완전하게 구현되어 있지 않아 해당 클래스로부터 객체를 생성할 수 없는 클래스. 일반적으로 다른 파생클래스의 기본 클래스로 사용
+봉인클래스 : 해당 클래스로부터 다른 파생클래스를 생성할 수 없는 클래스
+
+
+14. .NET의 Debug클래스와 Trace클래스는 유사한 기능을 한다. 둘의 차이점은 무엇인가?
+→
+둘 다 프로그램 실행 중 중요한 디버깅 혹은 디테일정보를 출력하기 위핸 클래스이다.
+차이점은 Debug의 경우 Debug 빌드에서만 작동하고, Trace는 Debug와 Release 빌드 모두에서 작동한다.
+
+
+15. c# 콘솔프로그램 실행 시 전달된 모든 입력 파라미터들을 한 라인씩 콘솔에 다시 출력하는 프로그램을 작성하시오.
+→
+static void Main(string[] args){
+    foreach(string s in args){
+        Console.WriteLine(s);
+    }
+}
