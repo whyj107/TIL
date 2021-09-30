@@ -1,0 +1,48 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+16. .NET에서는 어떻게 DLL HELL 문제를 해결하였는지 설명하시오.
+→
+DLL HELL : 한 DLL이 여러 프로그램에 의해 공유되어 사용될 때, 한 프로그램에서 새로 향상된 버젼의 DLL을 사용하기 위해 이 DLL을 업그레이드 하면, 이를 공유해서 사용하던 다른 프로그램들에서 문제이다.
+ 이 이슈는 기본적으로 동일한 디렉토리에 동일한 이름을 가진 다른 버전의 DLL을 복수로 가질 수 없기 때문에 발생한다.
+ .NET에서는 Assembly Versioning을 통해 DLL을 이름뿐만 아니라 Version, Culture(언어 및 지역 정보), Public Key 토큰, 프로세서 아키텍쳐 등의 정보를 함께 사용하여 DLL의 위치를 파악하기 때문에, 동일한 DLL명이라 하더라도 다른 DLL로 인식할 수 있다.
+
+
+17. 두개의 정수 a, b의 값을 서로 바꾸는 c# 코드를 쓰시오. (단, a,b이외의 임시 변수 사용 불가)
+→
+Exclusive OR를 사용하여 별도의 임시 변수를 두지 않고, 두 값을 치환할 수 있다.
+a ^= b;
+b ^= a;
+a ^= b;
+
+
+18. 아래 c#코드에서 Derived 클래스 객체를 생성하면 콘솔 화면에 어떻게 출력되는가?
+public class Base {
+ public Base() { Console.WriteLine("A");}
+}
+public class Derived : Base {
+ public Derived() { Console.WriteLine("B");}
+}
+→
+A
+B
+
+
+19. Value Type과 Reference Type의 차이점은 무엇인가?
+→
+Value Type : 로컬 변수 혹은 파라미터는 해당 타입의 값을 스택에 가진다.
+Reference Type : Managed Heap 상에 Type 객체를 생성하고 이 객체에 대한 레퍼런스만을 스택에 가진다.
+c# 코드에서 Value Type과 Reference Type 사이의 변환을 하게 되면, 박싱/언박싱이 일어나게 되고, 상당한 양의 박싱/언박싱이 일어나면 성능에 영향을 미칠 수 있다.
+
+Value Type에 Null을 할당할 수 있는가?
+→ 없다. Reference Type만 가능
+struct는 Value Type인가?
+→ 예
+struct로부터 상속을 할 수 있는가?
+→ 아니오. Value 타입은 다른 타입의 Base가 될 수 없다. 암묵적으로 Sealed이다.
+struct는 Interface를 구현할 수 있는가?
+→ 예
+
+
+20. 변수 i=10, j=20, y=100 일때, 식 bool x=(i<j) || (y+=i)==110 의 x, y값은?
+→ true, 110
