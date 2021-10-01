@@ -1,0 +1,63 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+21. 정수 i=6, j=8 일때, j+=i++ 을 실행한 후 i,j값은 무엇인가?
+→
+i: 7, j: 14
+
+
+22. 정수 x에 곱셈연산자(*)를 쓰지 않고 16배로 만들기 위해서는 어떻게 할 수 있는가?
+→
+x <<= 4;
+
+
+23. 모든 WinForm 컨트롤들은 InvokeRequired 라는 속성을 가지고 있다. 이 속성은 어떤 때 사용하는가?
+→
+ 모든 WinForm 컨트롤들은 InvokeRequired라는 속성을 가지고 있는데, 이 속성은 현재 문장을 실행하는 쓰레드가 컨트롤을 생성한 UI 쓰레드인지 아닌지를 알려준다. WinForm 멀티쓰레딩에서 모든 UI 컨트롤은 자신을 생성한 UI 쓰레드에서 컨트롤 객체를 변경 혹은 쿼리하여야 한다.
+ 멀티쓰레딩 환경에서 Worker Thread가 엑세스할 수 있는 메서드의 경우, InvokeRequired 속성을 체크해서 만약 UI 쓰레드가 아니면 Invoke() 혹은 BeginInvoke()를 써서 UI 쓰레드로 호출을 보낸다.
+
+
+24. C++의 소멸자(Destructor)와 C#의 Destructor(Finalizer)의 차이점을 설명하시오.
+→
+ C++의 Destructor는 ~Class() {...} 같이 클래스명 앞에 ~를 붙여 선언되며, 클래스 객체가 소멸될 때 리소스를 해제하기 위해 사용된다. C++의 소멸자는 프로그램 중 delete obj1;과 같은 문장이 실행될 때 호출되며 개발자가 정확히 언제 소멸자를 실행할지를 컨트롤 할 수 있다.
+
+ C#의 Destructor는 C++와 구분하기 위해 흔히 Finalizer로 불리우며, C++와 같이 ~Class() {....} 문장을 사용한다. 하지만, 근본적으로 다른 점은 이 Finalizer가 언제 실행될 지 개발자가 알 수 없고 결정할 수도 없다는 점이다. 이는 Managed Code의 경우 .NET의 Garbage Collection 메카니즘을 사용하기 때문인데, Finalizer와 관련된 Garbage Collector(GC) 동작을 요약하면 다음과 같다.
+
+ C# 클래스에 Finalizer(Destructor) 메서드가 있으면, 해당 객체는 생성자 호출시 Finalziation Queue라고 하는 GC안의 내부 큐에 해당 객체 레퍼런스가 추가된다. 이 후 Managed Heap이 차서 Garbage Collection이 필요하게 되면, Finalization Queue에 없는 객체들은 사용중이 아니면 Garbage로 판단해서 삭제하게 되지만, Finalization Queue에 있는 객체는 이 객체 레퍼런스를 Freachable Queue라고 하는 다른 내부 큐로 이동시키게 된다. 이후, GC의 특별한 Finalization Thread가 이 Freachable Queue에서 객체를 하나씩 꺼내서 Destructor안의 코드 (컴파일러는 이를 Finalize()메서드 호출로 변경한다) 실행한다. 이렇게 모든 Finalizer 코드들이 실행되고, 다음 Garbage Collection 시기가 오면 GC는 Finalizer가 있던 객체를 이제 Garbage로 인식해서 삭제하게 된다.
+
+
+25. C#클래스에 파일 핸들이나 DB Connection같은 Unmanaged 리소스를 가지고 있을 때, 어떻게 이들 리소스를 해제할 수 있는가?
+→
+ 클래스가 파일 핸들이나 네트워크 연결 같은 Unmanaged 리소스를 가지고 있는 경우, 이 리소스를 해제해 주기 위해 (1) Finalizer (Destructor), (2) Dispose 패턴을 사용할 수 있다.
+
+(1) Finalizer는 Garbage Collector(GC)에 의해 객체 소멸 전에 호출되는 코드 블력으로 이 안에 파일 핸들을 닫거나 연결을 닫는 코드를 넣는다.
+
+~MyClass() {
+   if (file != null) { 
+      file.Close(); 
+   }
+}
+
+ 이 방식의 문제점은 실행이 GC에 의해 자동으로 결정되기 때문에 언제 이 코드가 실행될 지 모른다는 점이다. 즉, 객체가 다 사용되었는데, 파일은 계속 열려 있는 상태가 되고, GC가 언제 이를 Close할지도 모른다는 것이다. 이러한 문제점을 해결하기 위해 Dispose 패턴을 사용한다.
+
+(2) Unmanaged 리소스가 있는 클래스는 일반적으로 IDisposable이라는 인터페이스를 추가하고, IDisposable.Dispose() 메서드를 구현한다.
+
+public void Dispose() {
+   if (file != null) { 
+      file.Close(); 
+   }
+   //클래스에 Finalizer가 있을 경우
+   GC.SuppressFinalize(this);
+}
+
+ 클래스 사용자는 이 Dispose()메서드를 실행하여 GC를 기다리지 않고 리소스를 즉시 해제한다. Dispose가 있더라도 클래스 사용자가 이를 호출하지 않았을 경우, 최후의 보루로 리소스를 해제하고 싶으면 개발자는 Finalizer를 추가할 수 있다. (물론 Finalizer를 추가하면 문제#24에서 소개한 부작용이 생길 수 있다)
+
+[가산점] 위의 Dispose()메서드 안의 GC.SuppressFinalize를 왜 호출하는가?
+[A] 클래스가 Finalizer 메서드와 Dispose메서드를 가지고 있을 때, Dispose() 메서드 호출한 후에는 Finalizer코드를 다시 실행할 필요가 없다. 즉, 리소스를 두번 해제할 필요가 없다. 이 경우 GC.SuppressFinalize를 호출하여 Finalization Queue안의 해당 객체에 플래그를 표시하여 Garbage Collection시 이 객체가 Freachable Queue로 이동하지 않게 한다. 따라서, Finalize()메서드가 호출되지 않게 하는 것이다.
+
+
+
+
+
+
+
