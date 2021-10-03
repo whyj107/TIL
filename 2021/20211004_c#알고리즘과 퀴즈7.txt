@@ -1,0 +1,145 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+31. 문자열을 입력받아 각 문자들을 일렬로 나열하는 순열(Permutation) 결과를 프린트하는 함수를 작성하시오.
+→
+void PrintPermutation(string s)
+{
+    StringBuilder sb = new StringBuilder(s.Length);
+    bool[] flag = new bool[s.Length];
+    Permute(s, sb, flag);
+}
+
+void Permute(string s, StringBuilder sb, bool[] flag)
+{
+    if (sb.Length == s.Length)
+    {
+        Console.WriteLine(sb.ToString());
+        return;
+    }
+
+    for (int i = 0; i < s.Length; i++)
+    {
+        if (flag[i]) continue;
+
+        sb.Append(s[i]);
+        flag[i] = true;
+
+        Permute(s, sb, flag);
+
+        sb.Remove(sb.Length - 1, 1);
+        flag[i] = false;
+    }
+}
+
+
+32. 정수 N이 2의 N승 (2^n)인지를 검사하는 메서드를 작성하시오.
+→
+bool IsPowerOf2(int n)
+{
+    return (n > 0) && ((n & (n - 1)) == 0);
+}
+
+
+33. 정수N의 비트들이 앞에서부터 읽으나 뒤에서부터 읽으나 동일한 것을 회문(Palindrome)이라 한다. 회문을 판별하는 함수 IsPalindrome()를 작성하시오.
+→
+bool IsPalindrome(int n)
+{
+    int rev = 0;
+    int t = n;
+
+    while (t != 0)
+    {
+         rev <<= 1;
+         rev |= t & 1;
+         t >>= 1;
+    }
+    return (rev == n);
+}
+
+
+34. 두개의 정렬된 정수형 List를 파라미터로 받아들인 후, 이를 합쳐 정렬한 결과를 리턴하는 함수를 작성하시오.
+→
+public List<int> MergeList(List<int> list1, List<int> list2)
+{
+    List<int> result = new List<int>();
+    var enum1 = list1.GetEnumerator();
+    var enum2 = list2.GetEnumerator();
+    bool exists1 = enum1.MoveNext();
+    bool exists2 = enum2.MoveNext();
+
+    while (exists1 || exists2)
+    {
+        if (exists1 && exists2)
+        {
+            if (enum1.Current < enum2.Current)
+            {
+                result.Add(enum1.Current);
+                exists1 = enum1.MoveNext();
+            }
+            else 
+            {
+                result.Add(enum2.Current);
+                exists2 = enum2.MoveNext();
+            }
+        }
+        else if (exists1)
+        {
+            for (; exists1; exists1 = enum1.MoveNext())
+            {
+                result.Add(enum1.Current);
+            }                    
+        }
+        else
+        {
+            for (; exists2; exists2 = enum1.MoveNext())
+            {
+                result.Add(enum1.Current);
+            }                    
+        }
+    }
+    return result;
+}
+
+
+35. 1원, 10원, 50원, 100원짜리 동전이 제한없이 있다고 가정했을 때, 총 90원을 만드는 방법의 수를 구하는 함수를 작성하시오.
+→
+class CoinChangeCount
+{
+    static void Main(string[] args)
+    {
+        int[] coins = { 1, 10, 50, 100 };            
+
+        CoinChangeCount c = new CoinChangeCount();
+        int ans = c.Count(coins, 4, 90);
+        Console.WriteLine("Count={0}", ans);
+        
+        Dictionary<Tuple<int, int>, int> hash = new Dictionary<Tuple<int, int>, int>();
+        ans = c.DPCount(coins, 4, 90, hash);
+        Console.WriteLine("Count={0}", ans);
+    }
+
+    int Count(int[] coins, int m, int n)
+    {
+        if (n == 0) return 1;
+        if (n < 0) return 0;
+        if (m <= 0) return 0;
+
+        return Count(coins, m - 1, n) + Count(coins, m, n - coins[m - 1]);
+    }
+
+    int DPCount(int[] coins, int m, int n, Dictionary<Tuple<int, int>, int> hash)
+    {
+        if (n == 0) return 1;
+        if (n < 0) return 0;
+        if (m <= 0) return 0;
+
+        Tuple<int, int> pair = new Tuple<int, int>(m, n);
+        if (!hash.ContainsKey(pair))
+        {
+            int result = DPCount(coins, m - 1, n, hash) + DPCount(coins, m, n - coins[m - 1], hash);
+            hash.Add(pair, result);
+        }
+        return hash[pair];
+    }
+}
