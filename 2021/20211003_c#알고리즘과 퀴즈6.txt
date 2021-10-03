@@ -1,0 +1,119 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+26. C#의 using(..){...} 블럭은 언제 사용할 수 있는가?
+→
+C#의 using(){...}블럭은 using() 안의 객체가 IDisposable 인터페이스를 구현했을 때 사용할 수 있다. using 블럭은 try ... finally 블럭으로 변경되면서 finally 블럭에서 해당 객체의 Dispose() 메서드를 호출한다.
+따라서, C#의 using 블럭은 Unmanaged 리소스를 해제하기 위해 IDisposable 을 구현 클래스의 해제 명령(Dispose 메서드)를 자동으로 호출해 주는 효과가 있다.
+중간에 오류가 발생할 시 Dispose가 호출되고 난 후, 에러를 throw한다.
+
+
+27. 1부터 5까지의 Random Number를 리턴하는 Rand5()를 이용하여, 1부터 7까지의 Random Number를 리턴하는 Rand7()함수를 작성하시오.
+→
+int Rand7()
+{
+    while (true)
+    {
+        int r = 5 * (Rand5() - 1) + Rand5();
+        if (r <= 21)
+        {
+            return r % 7 + 1;
+        }
+    }
+}
+
+
+28. 정수 n을 이진 형식(binary format)으로 표현했을 때, 1인 bit가 몇 개인지를 계산하는 함수를 작성하시오.
+→
+int GetNoOfBits1(int n)
+{       
+    int count = 0;
+    for(int i=0; i<32; i++)
+    {
+        count += (n & (1 << i)) != 0 ? 1 : 0;
+    }
+    return count;
+}
+int GetNoOfBits2(int n)
+{
+    int count = 0;
+    while(n != 0)
+    {
+        n = n & (n - 1);
+        count++;
+    }
+    return count;
+}
+
+
+29. string 문자열을 정수로 변환하는 자신의 C# 함수를 작성하시오. (문자열은 숫자 혹은 - (마이너스)만을 갖는다고 가정)
+→
+int StrToInt(string s)
+{
+    if (string.IsNullOrEmpty(s)) return 0;            
+
+    int i = 0, num = 0;
+    int sign = 1;
+
+    char[] a = s.ToCharArray();
+    if (a[i] == '-')
+    {
+        i++;
+        sign = -1;
+    }
+
+    while (i < a.Length)
+    {
+        num *= 10;
+        num += a[i] - '0';
+        i++;
+    }
+
+    return num * sign;
+}
+
+사실 int.Parse("123")이나 int.TryParse("123", out v)로 하면 된다.
+
+
+30. C#으로 피보나치 함수를 작성하시오.
+→
+int Fib(int n)
+{
+    return n <= 1 ? n : Fib(n - 1) + Fib(n - 2);
+}
+------------------------------------------------------------------------------
+using System.Collections.Generic;
+
+namespace Fibo
+{
+    class Class1
+    {
+       Hashtable memo = new Hashtable();        
+
+       public int Fib(int n)
+       {
+          int f;
+
+          if (memo.ContainsKey(n)) return (int)memo[n];
+            
+          if (n <= 1) f = n;
+          else f = Fib(n - 1) + Fib(n - 2);
+
+         memo.Add(n, f);
+         return f;
+        }    
+     }
+}
+------------------------------------------------------------------------------
+public int Fib(int n)
+{
+    int[] F = new int[n + 1];
+
+    for (int i = 0; i <= n; i++)
+    {
+        if (i <= 1) F[i] = i;
+        else F[i] = F[i - 1] + F[i - 2];
+    }
+
+    return F[n];
+}
