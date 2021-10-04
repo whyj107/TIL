@@ -1,0 +1,124 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+36. 정수 배열안에 동일한 숫자가 2번씩 들어 있고 하나의 숫자만이 쌍을 이루지 않고 들어 있다. 이 하나의 숫자를 구하는 함수를 작성하시오. (정수 배열 2, 4, 9, 5, 9, 5, 7, 4, 2 일때 답은 7)
+→
+int FindSingleInt(int[] arr)
+{
+    int x = 0;
+
+    for (int i = 0; i < arr.Length; i ++)
+    {
+        x ^= arr[i];
+    }
+
+    return x;
+}
+
+
+37. 미리 정렬된 정수 배열에서 두개의 배열요소를 더하여 일정한 값을 갖는 요소 쌍을 구하시오. 예를 들어, 배열 { 1, 4, 6, 9, 10, 12, 16 } 에서 합이 16이 되는 쌍을 찾으시오.
+→
+List<Tuple<int, int>> FindN(int[] a, int n)
+{
+    var result = new List<Tuple<int, int>>();
+    int i = 0;
+    int j = a.Length - 1;
+    int s = 0;
+
+    while (i < j)
+    {
+        s = a[i] + a[j];
+        if (s == n)
+        {
+            Debug.WriteLine("{0},{1}", a[i], a[j]);
+            result.Add(new Tuple<int,int>(a[i], a[j]));
+            i++;
+            j--;
+        }
+        else if (s < n)
+        {
+            i++;
+        }
+        else
+        {
+            j--;
+        }
+    }
+
+    return result;
+}
+
+
+38. 한 문자열 s1안에 다른 문자열 s2의 순열(Permutation)에 해당하는 문자열을 포함하고 있는지 체크하는 함수를 작성하시오.
+→
+public static bool HasStringPermutation(string s1, string s2)
+{
+    // Ex : S1 = ABCDEFGHI
+    //      S2 = ECD
+    char[] a1 = s1.ToCharArray();
+    char[] a2 = s2.ToCharArray();
+    char[] t = new char[a2.Length];
+
+    Array.Sort(a2);            
+
+    for (int i = 0; i < a1.Length - a2.Length + 1; i++)
+    {
+        for (int j = 0; j < a2.Length; j++)
+        {
+            t[j] = a1[i + j];
+        }
+
+        Array.Sort(t);                
+
+        if (t.SequenceEqual(a2))
+            return true;
+    }
+
+    return false;
+}
+
+
+39. 이진트리(Binary Tree)에서 두 노드를 모두 포함하는 최소 공통 조상 노드를 구하는 코드를 작성하시오.
+→
+public TreeNode FindLCA(TreeNode root, TreeNode n1, TreeNode n2)
+{
+    if (root == null) return null;
+
+    if (root == n1 || root == n2) return root;
+
+    TreeNode left = FindLCA(root.Left, n1, n2);
+    TreeNode right = FindLCA(root.Right, n1, n2);
+
+    if (left != null && right != null) return root;
+    if (left != null) return left;
+    if (right != null) return right;
+
+    return null;
+}
+
+
+40. 한 문자열(혹은 문자배열)의  문자들로 만들 수 있는 모든 조합(Combination)을 출력하시오. 예를 들어, ABC의 경우, A,B,C,AB,AC,BC,ABC 를 출력하게 되고, 문자의 순서는 무관.
+→
+public void RunTest()
+{
+    StringBuilder sb = new StringBuilder();
+    StringCombination("ABC", sb, 0);
+}
+
+void StringCombination(string s, StringBuilder sb, int index)
+{
+    for (int i = index; i < s.Length; i++)
+    {
+        // 1) 한 문자 추가
+        sb.Append(s[i]);
+
+        // 2) 구한 문자조합 출력
+        Console.WriteLine(sb.ToString());
+
+        // 3) 나머지 문자들에 대한 조합 구하기
+        StringCombination(s, sb, i + 1);
+
+        // 위의 1에서 추가한 문자 삭제 
+        sb.Remove(sb.Length - 1, 1);
+    }
+}
