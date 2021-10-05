@@ -1,0 +1,123 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+41. 정수 배열을 입력받아 해당 배열의 임의의 범위에 있는 정수들을 더한 값이 최대가 되는 정수 최대 합계를 구하시오.
+→
+int MaxSumOfSubarray(int[] a)
+{
+    int max = 0;
+    int tempSum = 0;
+
+    for (int i = 0; i < a.Length; i++)
+    {
+        tempSum += a[i];
+        tempSum = Math.Max(tempSum, 0);
+        max = Math.Max(max, tempSum);
+    }
+    return max;
+}
+
+
+42. 클래식 하노이의 탑 문제에는 3개의 막대기가 있고, 한 막대기에 오름차순으로 N개의 디스크가 있다. 디스크가 있는 막대기에서 다른 하나의 막대기로 모두 디스크를 옮기는데, 한번에 1개씩 옮겨야 하고, 큰 디스크는 작은 디스크 위에 올려질 수 없다는 제약 조건이 있다. 스택을 사용하여, N개의 디스크를 첫번째 막대기에서 세번째 막대기로 옮기는 프로그램을 작성하시오.
+→
+class HanoiTower
+{
+    Hashtable ht = new Hashtable();
+    public void RunTest()
+    {            
+        Stack<int> t1 = new Stack<int>(new[] { 3,2,1 });            
+        Stack<int> t2 = new Stack<int>();
+        Stack<int> t3 = new Stack<int>();
+        ht[t1] = "T1";
+        ht[t2] = "T2";
+        ht[t3] = "T3";
+
+        MoveDisk(t1, t3, t2, t1.Count);
+    }
+
+    void MoveDisk(Stack<int> from, Stack<int> to, Stack<int> aux, int n)
+    {
+        if (n <= 0) return;
+        if (n == 1)
+        {
+            int v = from.Pop();
+            to.Push(v);
+            Console.WriteLine("Move {0} from {1} to {2}", v, ht[from], ht[to]);
+            return;
+        }
+
+        MoveDisk(from, aux, to, n - 1);
+        MoveDisk(from, to, aux, 1);
+        MoveDisk(aux, to, from, n - 1);
+    }        
+}
+
+
+43. 정렬되지 않은 정수 배열이 있을 때, 배열을 소트하지 않고 중간값(Median)을 구하는 코드를 작성하시오.
+→
+class FindMedianWithoutSort
+{
+    private int[] A = new int[]{ 1, 9, 5, 3, 8, 4, 2, 6, 7 };
+        
+    public void RunTest()
+    {
+        int answer = FindMedian();
+        Console.WriteLine(answer);
+    }
+
+    int FindMedian()
+    {
+        int k = (int)Math.Ceiling((double)A.Length / 2);
+        return FindKthSmallest(0, A.Length -1 , k -1);
+    }
+
+    int FindKthSmallest(int left, int right, int kth)
+    {
+        while (true)
+        {
+            int m = Partition(left, right);
+
+            if (m == kth)
+            {
+                return A[m];
+            }
+            else if (m < kth)
+            {
+                left = m + 1;                    
+            }
+            else
+            {
+                right = m - 1;
+            }
+        }
+    }
+
+    int Partition(int left, int right)
+    {            
+        int pivot = A[right];            
+        int i = left;
+        int j = right - 1;
+
+        while(i < j)
+        {
+            while (i < right && A[i] <= pivot) i++;
+            while (j >= 0 && A[j] >= pivot) j--;
+
+            if (i < j)
+            {
+                //ref를 사용하여 pass by reference
+                Swap(ref A[i], ref A[j]);
+            }
+        }
+
+        Swap(ref A[i], ref A[right]);
+        return i;
+    }
+
+    void Swap(ref int a, ref int b)
+    {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+}
