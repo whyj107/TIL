@@ -1,0 +1,83 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+44. 그래프(Graph)의 노드들을 Depth-First 방식으로 출력하는 코드를 작성하시오. 방향 그래프가 순환(Cyclic)구조인지를 나타내는 메서드를 작성하시오.
+→
+public enum VisitState {
+   Unvisited,        
+   Visited
+}
+public class GraphNode<T> {
+    public VisitState State { get; set; }
+}
+public void DFS(GraphNode<T> g) 
+{
+   // 가정: _nodeList : 그래프안의 GraphNode 리스트 필드
+   _nodeList.ForEach(p => p.State = VisitState.Unvisited);
+   DFSRecursive(g);
+}
+void DFSRecursive(GraphNode<T> g)
+{
+    Console.WriteLine(g.Data); // visit node
+    g.State = VisitState.Visited;            
+    foreach (var n in g.Neighbers)
+    {
+        if (n.State == VisitState.Unvisited) {
+            DFSRecursive();
+        }
+    }
+}
+
+순환체크
+public bool HasCycle(GraphNode<T> g, bool initStates = true)
+{
+    if (initStates) {
+        _nodeList.ForEach(p => p.State = VisitState.Unvisited);
+    }
+    g.State = VisitState.Visited;
+    foreach (var n in g.Neighbers)
+    {
+        if (n.State == VisitState.Unvisited) {
+            if (HasCycle(n, false))                    
+                return true;                    
+        }
+        else
+            return true;
+    }            
+    return false;
+}
+
+
+45. 배열에서 한 배열요소가 절반이 넘는다고 전제했을 때, 그 요소를 구하는 코드를 작성하시오. (나머지 요소들은 중복될 수도 있고 그렇지 않을 수 있으며, 별도의 메모리 사용을 O(1)으로 제한)
+→
+class FindMajorityInArray
+{
+    public void RunTest()
+    {
+        int[] A = { 3, 2, 2, 3, 2, 1, 2 }; 
+        int majority = FindMajorityElement(A);
+        Console.WriteLine(majority);
+    }
+
+    int FindMajorityElement(int[] A)
+    {
+        int current = 0;
+        int counter = 0;
+
+        for (int i = 0; i < A.Length; i++)
+        {
+            if (counter == 0)
+            {
+                current = A[i];
+                counter = 1;
+            }
+            else
+            {
+                if (A[i] == current) { counter++; }
+                else { counter--; }
+            }
+        }
+
+        return current;
+    }
+}
