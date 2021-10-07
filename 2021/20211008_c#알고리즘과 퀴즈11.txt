@@ -1,0 +1,101 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+46. 사칙연산으로 된 문자열 산술식(Expression)의 결과를 구하는 코드를 작성하시오. (괄호는 포함되지 않았다고 가정하며, 모두 정수라고 가정함)
+→
+public static void RunTest()
+{
+    string expr = "11 + 22 * 33 - 44";
+    int result = Evaluate(expr);
+    Console.WriteLine(result);
+}
+
+// 제약: 4칙연산만
+static int Evaluate(string expression)
+{                        
+    string postFix = ConvertToPostfix(expression);
+    Console.WriteLine(postFix);
+
+    return EvaluatePostfix(postFix);
+}
+
+static string ConvertToPostfix(string expr)
+{            
+    Stack<char> stack = new Stack<char>();
+    StringBuilder sb = new StringBuilder();
+
+    foreach (var ch in expr)
+    {
+        if (ch >= '0' && ch <= '9' || ch == ' ')
+        {
+            sb.Append(ch);
+        }
+        else if (ch == '*' || ch == '/')
+        {                    
+            stack.Push(ch);
+        }
+        else if (ch == '+' || ch == '-')
+        {
+            while (stack.Count > 0)
+            {
+                sb.Append(stack.Pop());
+                sb.Append(' ');
+            }
+            stack.Push(ch);
+        }
+        else
+        {
+            throw new ArgumentException();
+        }
+    }
+
+    if (stack.Count > 0)
+    {
+        sb.Append(stack.Pop());
+    }
+
+    return sb.ToString();
+}
+
+static int EvaluatePostfix(string expr)
+{
+    Stack<int> stack = new Stack<int>();
+    int c = 0;
+
+    for(int i=0; i<expr.Length; i++)
+    {
+        char ch = expr[i];
+
+        if (ch == ' ') continue;
+                
+        if (ch >= '0' && ch <= '9')
+        {
+            string s = "";
+            while (i<expr.Length && expr[i] >= '0' && expr[i] <= '9')
+            {
+                s += expr[i++];
+            }
+            i--;                    
+            stack.Push(int.Parse(s));
+        }
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+        {
+            int b = stack.Pop();
+            int a = stack.Pop();
+            switch (ch)
+            {
+                case '+': c = a + b; break;
+                case '-': c = a - b; break;
+                case '*': c = a * b; break;
+                case '/': c = a / b; break;
+            }
+            stack.Push(c);                    
+        }
+        else
+        {
+            throw new ArgumentException();
+        }
+    }
+
+    return stack.Pop();
+}
