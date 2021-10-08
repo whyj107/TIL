@@ -1,0 +1,198 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+47. 순환 자료구조를 사용하여 Queue를 구현하시오.
+→
+class CircularQueue
+{
+    const int DEFAULT_SIZE = 16;
+    int[] Q = new int[DEFAULT_SIZE]; 
+    int front = -1;
+    int rear = -1;
+
+    public void Enqueue(int val)
+    {
+        if (rear + 1 % Q.Length == front) 
+        {
+            throw new ApplicationException("Queue is full");                
+        }
+
+        if (front == -1){ front = rear = 0; }
+        else { rear = rear + 1 % Q.Length; }
+
+        Q[rear] = val;
+    }
+
+    public int Dequeue()
+    {
+        if (front == -1) { throw new ApplicationException("Queue is empty"); }
+
+        int val = Q[front];
+
+        if (front == rear) { front = rear = -1; }
+        else { front = front + 1 % Q.Length; }
+
+        return val;
+    }
+}
+
+
+48. A,B,C,D,E 등 5개의 작업(Task)가 있다. A와 B는 C에 의존하여 C가 끝나야만 실행된다. C는 D와 E에 의존하고, D는 E에 의존한다. 상호의존성을 고려하여 작업 순서를 구하는 코드를 작성하시오. (결과 예: D E C A B)
+→
+static void RunTest()
+{
+    Graph g = new Graph();
+
+    GraphNode A = new GraphNode("A");
+    GraphNode B = new GraphNode("B");
+    GraphNode C = new GraphNode("C");
+    GraphNode D = new GraphNode("D");
+    GraphNode E = new GraphNode("E");
+
+    g.GraphNodes.AddRange(new[] { A, B, C, D, E });
+
+    D.AddEdge(C);
+    E.AddEdge(C);
+    D.AddEdge(E);
+    C.AddEdge(A);
+    C.AddEdge(B);
+
+    var result = g.TopologicalSort();
+
+    foreach (var n in result)
+    {
+        Console.WriteLine(n.Data);
+    }
+} 
+class Graph
+{
+    private List<GraphNode> _nodes = new List<GraphNode>();
+    private Stack<GraphNode> _sortResult;
+
+    public List<GraphNode> GraphNodes { get { return this._nodes; } }
+
+    public IEnumerable<GraphNode> TopologicalSort()
+    {
+        this._sortResult = new Stack<GraphNode>();
+
+        foreach (var gnode in this.GraphNodes)
+        {
+            gnode.Visited = false;
+        }
+
+        foreach (var v in this.GraphNodes)
+        {
+            if (!v.Visited) Visit(v);
+        }
+
+        return _sortResult;
+    }
+
+    void Visit(GraphNode n)
+    {
+        n.Visited = true;
+
+        foreach (var v in n.Neightbors)
+        {
+            if (!v.Visited) Visit(v);
+        }
+            
+        this._sortResult.Push(n);    
+    }
+}
+
+class GraphNode
+{
+    public GraphNode(object data)
+    {
+        this.Data = data;
+    }
+
+    public object Data { get; set; }
+
+    public bool Visited { get; set; }
+
+    public List<GraphNode> Neightbors
+    {
+        get { return this.neightbors; }
+    }
+
+    public void AddEdge(GraphNode to)
+    {
+        this.Neightbors.Add(to);
+    }
+
+    private List<GraphNode> neightbors = new List<GraphNode>();
+}
+
+
+49. 정수값을 갖는 Matrix (N x N 2차원 배열) 에서 특정 정수값이 존재하는지 체크하는 코드를 작성하시오. 단, Matrix는 왼쪽에서 오른쪽으로 오름차순으로 그리고 위에서 아래 방향으로 오름차순으로 정렬되어 있다.
+→
+public void RunTest()
+{
+    // Assumption : A[N,N]
+    const int N = 4;
+    int[,] A = new int[N, N] { 
+        {10,  20,  30,  40},
+        {15,  22,  33,  44},
+        {25,  27,  41,  49},
+        {35,  40,  50,  60}
+    };
+
+    bool found = NumberExists(A, 30);
+    Console.WriteLine("Found 30? " + found);
+}
+        
+bool NumberExists(int[,] A, int n)
+{            
+    int N = A.GetLength(0);
+    int r = N - 1;
+    int c = 0;
+
+    while (c < N && r >= 0)
+    {
+        int val = A[r, c];
+        if (val == n)
+            return true;
+
+        if (val > n)
+            r--;
+        else
+            c++;
+    }
+
+    return false;
+}
+
+
+50. 이진트리의 각 레벨(Level)별로 한 라인씩 노드값들을 출력하는 코드를 작성하시오.
+→
+A
+BC
+DEFG
+==
+public static void BFSLevelOutput(TreeNode root)
+{
+    Queue<TreeNode> q = new Queue<TreeNode>();
+    q.Enqueue(root);
+    q.Enqueue(null);
+
+    while (q.Count > 0)
+    {
+        var node = q.Dequeue();
+        
+        if (node == null)
+        {
+            Console.WriteLine();
+            if (q.Count > 0) q.Enqueue(null);
+            continue;                    
+        }
+
+        Console.Write(node.Value);
+
+        if (node.Left != null)
+            q.Enqueue(node.Left);
+        if (node.Right != null)
+            q.Enqueue(node.Right);
+    }
+}
