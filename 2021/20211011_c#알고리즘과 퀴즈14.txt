@@ -1,0 +1,74 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+53. 어느 회사의 주식가격이 정수 배열에 다음과 같이 저장되어 있다. (10, 15, 11, 8, 9, 20, 0, 19) 주식을 오직 한번만 사고 팔수 있다고 할 때, 최대 수익을 내는 요소구간과 최대값을 구하는 코드를 작성하시오.
+→ 처음 요소부터 순차적으로 최소값을 현재 위치와 다시 비교, 현재값이 더 적으면 최소값을 현재값으로 재지정하고, 더 크면 이전 최소값을 그대로 유지한다.
+void GetMaxProfit()
+{
+    int[] A = { 10, 15, 11, 8, 9, 20, 0, 19 };
+    int[] min = new int[A.Length];
+    int[] minPos = new int[A.Length];
+
+    for (int i = 0; i < A.Length; i++)
+    {
+        if (i == 0)
+        {
+            min[i] = A[0];
+            minPos[i] = i;
+            continue;
+        }
+
+        if (A[i] <= min[i - 1])
+        {
+            min[i] = A[i];
+            minPos[i] = i;
+        }
+        else
+        {
+            min[i] = min[i - 1];
+            minPos[i] = minPos[i-1];
+        }
+    }
+
+    int max = int.MinValue;
+    int pos = -1;
+    for (int i = 0; i < A.Length; i++)
+    {
+        if (A[i] - min[i] > max)
+        {
+            max = A[i] - min[i];
+            pos = i;
+        }
+    }
+
+    Console.WriteLine("Max Range : {0}-{1}", minPos[pos], pos);
+    Console.WriteLine("Max Value : {0}", max);
+}
+
+
+54. 정수배열과 이진검색트리를 입력받아, 입력된 정수배열이 이진검색트리(BST)를 PostOrder로 읽은 값과 동일한 지를 나타내는 코드를 작성하시오.
+→ 이진검색트리를 PostOrder로 읽기 위해서는 왼쪽 - 오른쪽 - 현재노드를 읽게된다.
+bool IsPostOrder(TreeNode t, int[] A, ref int i)
+{
+return (t.Left==null || t.Left != null && IsPostOrder(t.Left, A, ref i))) 
+  && (t.Right==null || (t.Right!=null && IsPostOrder(t.Right, A, ref i))) 
+  && t.Value == A[i++];
+}
+
+
+55. 이진트리의 각 레벨별 좌우 노드가 반대 방향으로 되도록 트리를 재구성하는 코드를 작성하시오. 즉, 첫번째 레벨이 4, 두번째 레벨이 2, 6, 세번째 레벨이 1,3,5,7 일때, 변형된 트리는 각 레벨별로 4, (6,2), (7,5,3,1)과 같이 된다.
+→ 이진 트리의 좌우 노드를 서로 교환(swap)하여 문제를 해결할 수 있다. 루트노드의 좌우 노드 포인터를 SWAP하고, 계속 하위 레벨 노드들에 대해 Recursion을 사용하여 교환할 수 있다.
+void MirrorTree(TreeNode t)
+{
+    if (t == null || 
+        (t.Left == null && t.Right == null)) 
+        return;
+
+    var temp = t.Left;
+    t.Left = t.Right;
+    t.Right = temp;
+
+    MirrorTree(t.Left);
+    MirrorTree(t.Right);
+}
+
