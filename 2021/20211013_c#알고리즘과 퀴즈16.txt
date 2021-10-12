@@ -1,0 +1,66 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+58. 스택의 최소값을 리턴하는 함수 Min()을 갖는 커스텀 스택 클래스를 C# 코드를 작성하시오 (단, 이 스택의 Push(), Pop(), Min() 메서드의 Time Complexity는 모두 O(1) 이다)
+→ 
+class MinStack
+{
+    Stack<int> _stack = new Stack<int>();
+    Stack<int> _minstk = new Stack<int>();
+
+    public void Push(int value)
+    {
+        _stack.Push(value);
+
+        if (_minstk.Count == 0 || value < _minstk.Peek())
+        {
+            _minstk.Push(value);
+        }
+    }
+
+    public int Pop()
+    {
+        int value = _stack.Pop();
+        if (value == _minstk.Peek())
+        {
+            _minstk.Pop();
+        }
+        return value;
+    }
+
+    public int Min()
+    {
+        return _minstk.Peek();
+    }
+}
+
+
+59. 문자배열에서 중복되지 않는 첫 문자를 리턴하는 함수를 작성하시오. 예를 들어, 입력 문자배열이 abcabdefe 일 때, 중복되지 않는 첫 문자 c 를 리턴함.
+→ 
+void RunTest()
+{
+    string s = "abcabdefe";
+    char ch = GetFirstChar(s.ToCharArray());
+    Console.WriteLine(ch);
+}
+
+char GetFirstChar(char[] S)
+{
+    Dictionary<char, int> ht = new Dictionary<char, int>();
+
+    foreach (char ch in S)
+    {
+        if (!ht.ContainsKey(ch))
+            ht[ch] = 1;
+        else
+            ht[ch] += 1;
+    }
+
+    foreach (char ch in S)
+    {
+        if (ht[ch] == 1)
+            return ch;
+    }
+
+    return '\0';
+}
