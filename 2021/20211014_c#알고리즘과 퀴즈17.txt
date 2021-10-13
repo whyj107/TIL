@@ -1,0 +1,53 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+60. Stream으로부터 연속적으로 데이타를 받아 들일 때, 현재 싯점까지의 데이타 중 중간값(Median)을 출력하는 코드를 작성하시오. 
+(만약 데이타 수가 짝수이면 두 중간 숫자의 평균을 중간값으로 정함)
+→ 입력을 해가면서 중간값 상태를 계속 유지할 필요가 있다.
+
+class Median
+{
+    private MaxHeap maxHeap = new MaxHeap();
+    private MinHeap minHeap = new MinHeap();   
+
+    public void AddValue(int num)
+    {
+        if (minHeap.Count == maxHeap.Count)
+        {
+            if (minHeap.Count > 0 && maxHeap.Peek() > num)
+            {
+                minHeap.Add(maxHeap.RemoveOne());
+                maxHeap.Add(num);
+            }
+            else
+                minHeap.Add(num);
+        }
+        else //같지 않으면 minheap이 1개 많음
+        {
+            if (minHeap.Peek() < num)
+            {
+                maxHeap.Add(minHeap.RemoveOne());
+                minHeap.Add(num);
+            }
+            else
+            {
+                maxHeap.Add(num);
+            }
+        }
+    }
+
+    public int GetMedian()
+    {
+        if (maxHeap.Count == minHeap.Count)
+            return (maxHeap.Peek() + minHeap.Peek()) / 2;
+        else
+            return minHeap.Peek();
+    }
+}
+
+// 테스트
+var m = new Median();
+for (int i = 1; i <= 10; i++)  m.AddValue(i);
+Console.WriteLine(m.GetMedian());
+for (int i = 11; i <= 20; i++)  m.AddValue(i);
+Console.WriteLine(m.GetMedian());
