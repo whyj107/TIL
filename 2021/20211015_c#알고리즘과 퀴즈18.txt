@@ -1,0 +1,47 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+61. 이진트리(Binary Tree)를 입력받아 그 트리가 이진검색트리(Binary Search Tree)인지를 체크하는 코드를 작성하시오.
+→ 이진검색트리(Binary Search Tree)는 왼쪽 자식들이 부모 노드값보다 작고, 오른쪽 자식들이 부모 노드보다 크며, 중복된 값을 허용하지 않는다.
+public static bool IsBst(Node root)
+{
+    var minNode = root;
+    while(minNode.Left != null)
+    {
+        minNode = minNode.Left;
+    }
+
+    var maxNode = root;
+    while(maxNode.Right != null)
+    {
+        maxNode = maxNode.Right;
+    }
+
+    return IsBst(root, minNode.Key, maxNode.Key);
+}
+
+public static bool IsBst(Node node, int min, int max)
+{
+    if (node == null) return true;
+
+    if (node.Key < min || node.Key > max)
+    {
+        return false;
+    }
+
+    return IsBst(node.Left, min, node.Key)   // Left노드의 최대는 현재노드
+        && IsBst(node.Right, node.Key, max); // Right노드의 최소는 현재노드
+}
+
+
+62. 1부터 100만까지의 숫자가 들어있는 배열 A 에 한 숫자만 중복되어 들어 있다(배열 A 크기 = 백만+1). 이 중복된 숫자를 구하는 함수를 작성하시오.
+→ for문으로 일반적으로 더할시 overflow가 발생할 수 있기 때문에 xor을 사용하는 방식
+int XorMethod(int[] A)
+{
+    int r = 0;
+    for (int i = 0; i < A.Length; i++)
+    {
+        r = r ^ A[i] ^ i;
+    }
+    return r;
+}
