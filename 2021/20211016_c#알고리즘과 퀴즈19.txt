@@ -1,0 +1,66 @@
+[c# 알고리즘 퀴즈]
+http://www.csharpstudy.com/algo/qalist.aspx
+
+63. 개미수열(Look and Say Sequence)은 연속적으로 나온 숫자의 갯수를 해당숫자 바로 뒤에 붙여 열거한다. 예를 들어 입력이 1121인 경우 1이 2개 (12) 2가 1개 (21) 그리고 1이 1개 (11) 즉 122111 이 출력된다. 1부터 시작하여 10개의 개미수열을 구하는 프로그램을 작성하라. (예상결과: 1 / 11 / 12 / 1121 / 122111 / 112213 / 12221131 ...)
+→ 각 숫자를 순서대로 방문하여 숫자가 같을 경우 카운터를 증가시키고, 다른 경우 카운터를 결과에 추가한 후 카운터를 리셋, 다음 문자를 계속 체크한다.
+
+static void Main(string[] args)
+{
+    string num = 1.ToString();
+    Console.WriteLine(num);
+    for (int i = 0; i < 10; i++)
+    {                
+        num = LookAndSay(num);
+        Console.WriteLine(num);
+    }
+}
+static string LookAndSay(string s)
+{
+    StringBuilder result = new StringBuilder();
+    char curr = default(char);
+    int count = 0;
+
+    foreach(char ch in s)
+    {
+        if (ch != curr)
+        {
+            if (curr == default(char))
+            {
+                curr = ch;
+                count = 1;
+                result.Append(curr);
+            }
+            else
+            {
+                result.Append(count.ToString());
+                curr = ch;
+                count = 1;
+                result.Append(curr);
+            }
+        }
+        else
+        {
+            count++;
+        }
+    }
+    result.Append(count);
+    return result.ToString();
+}
+-------------------------- Recursive 방식 ▼
+static string LookAndSayRecursive(string s)
+{
+    if (string.IsNullOrEmpty(s)) return "";
+    if (s.Length == 1) return s[0] + "1";
+
+    if (s[s.Length - 1] != s[s.Length - 2])
+    {
+        return LookAndSayRecursive(s.Substring(0, s.Length - 1)) 
+               + s[s.Length - 1] + "1";
+    }
+    else
+    {
+        string r = LookAndSayRecursive(s.Substring(0, s.Length - 1));
+        int lastN = int.Parse(r.Substring(r.Length - 1, 1)) + 1;
+        return r.Substring(0, r.Length - 1) + lastN.ToString();
+    }
+}
