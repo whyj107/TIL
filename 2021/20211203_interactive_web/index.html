@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>스와이프 갤러리</title>
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon">	
+	<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+	<link rel="stylesheet" href="css/style.css">	
+	<script src="https://kit.fontawesome.com/c47106c6a7.js" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+</head>
+<body>	
+	<div class="wrap">
+		<h1><span>HBGH</span></h1>
+
+		<ul class="auto">
+			<li class="btnStart"><i class="fas fa-play"></i></li>
+			<li class="btnStop"><i class="fas fa-pause"></i></li>
+		</ul>
+
+		
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">
+				<div class="inner">
+					<div class="con">
+						<img src="img/pic1.png">
+						<h2>그림1</h2>
+						<p>그림1이다.</p>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="inner">
+					<div class="con">
+						<img src="img/pic2.png">
+						<h2>그림2</h2>
+						<p>그림2이다.</p>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="inner">
+					<div class="con">
+						<img src="img/pic3.png">
+						<h2>그림3</h2>
+						<p>그림3이다.</p>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="inner">
+					<div class="con">
+						<img src="img/pic4.png">
+						<h2>그림4</h2>
+						<p>그림4이다.</p>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="inner">
+					<div class="con">
+						<img src="img/pic5.png">
+						<h2>그림5</h2>
+						<p>그림5이다.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="swiper-button-next"></div>
+		<div class="swiper-button-prev"></div>
+	</div>	
+</body>
+</html>
+
+<script>
+const swiper = new Swiper('.wrap', {
+	direction: 'horizontal',
+	loop: true,
+
+	navigation: {
+		nextEl: '.swiper-button-next',
+		prevEl: '.swiper-button-prev',
+	},
+
+	spaceBetween: 0,
+	slidesPerView: "auto",
+	grabCuror: true,
+	centeredSlides: true,
+	speed: 1000,
+
+	effect: "coverflow",
+	coverflowEffect: {
+		rotate: 00,
+		stretch: -100,
+		depth: 400,
+		modifier: 1,
+		slideShadows: false,
+	},
+
+	autoplay: {
+		delay: 1000,
+		disableOnInteraction: true,
+	}
+});
+
+const btnStart = document.querySelector(".btnStart");
+const btnStop = document.querySelector(".btnStop");
+
+btnStart.addEventListener("click", ()=>{
+	swiper.autoplay.start();
+});
+
+btnStop.addEventListener("click", ()=>{
+	swiper.autoplay.stop();
+});
+</script>
